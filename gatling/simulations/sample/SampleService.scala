@@ -72,7 +72,8 @@ class SampleService extends Simulation {
       scn.inject(
         nothingFor(5 seconds)
         // , constantUsersPerSec(5) during(100 minutes)
-        , rampUsersPerSec(50) to 1000 during(10 minutes)
+        // , rampUsersPerSec(50) to 1000 during(10 minutes)
+        rampConcurrentUsers(50) to (1000) during(1 minutes)
       )
     ).protocols(httpProtocol)
 }
