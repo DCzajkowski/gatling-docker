@@ -11,7 +11,7 @@ services:
       - "8000:8000"
   gatling-runner:
     image: gatling:2.3.0
-    scale: 2 # Scale to see the result of multiple nodes
+    scale: 5 # Scale to see the result of multiple nodes
     build:
       context: gatling/2.3.0
     command: [-s, sample.SampleService]
