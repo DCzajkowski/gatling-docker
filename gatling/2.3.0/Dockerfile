@@ -1,6 +1,6 @@
 FROM java:8u111
 MAINTAINER ugurarpaci
-ADD gatling-2.3.0.tar.gz /opt/app/java/gatling/
+ADD gatling-3.3.1 /opt/app/java/gatling/
 
 ENV GATLING_HOME /opt/app/java/gatling
 ENV PATH="$PATH:/opt/app/java/gatling/bin"

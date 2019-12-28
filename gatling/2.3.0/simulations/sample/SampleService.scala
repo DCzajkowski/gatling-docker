@@ -39,13 +39,13 @@ class SampleService extends Simulation {
   // ).protocols(httpProtocol)
 
   val httpProtocol = http
-    .baseURL("http://63.34.148.153:80")
+    .baseUrl("http://63.34.148.153:80")
     .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
     .doNotTrackHeader("1")
     .acceptLanguageHeader("en-US,en;q=0.5")
     .acceptEncodingHeader("gzip, deflate")
     .userAgentHeader("Gatling2")
-    .wsBaseURL("ws://63.34.148.153:80")
+    .wsBaseUrl("ws://63.34.148.153:80")
 
   // .exec(http("Home").get("/"))
   // .pause(1)
@@ -57,12 +57,13 @@ class SampleService extends Simulation {
   val scn = scenario("WebSocket")
     .exec(
       ws("Connect")
-        .open("/socket/websocket?token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0aGVzaXMiLCJleHAiOjE1Nzk4ODY1MTcsImlhdCI6MTU3NzQ2NzMxNywiaXNzIjoidGhlc2lzIiwianRpIjoiYmYwMjU4YjEtZWI1YS00M2M4LWIxMTctMDM5NjNkMGIzYjcyIiwibmJmIjoxNTc3NDY3MzE2LCJzdWIiOiIxIiwidGhlc2lzIjp7InRlYW0iOnsiYm9hcmRfaWRzIjpbMV0sImlkIjoxfX0sInR5cCI6ImFjY2VzcyJ9.Sp_dsKXED_6kUXx16itDClsjnIGVQtqhf-_joImYlDiVFPHekK-6M1WScHMbkPU6p2daiZgGrHHDxwo9eDWUTg")
-    )
-    .pause(1)
-    .exec(
-      ws("Channel")
-        .sendText("""{"topic":"boards:1", "event":"phx_join", "payload": {}, "ref":"1"}""")
+        .connect("/socket/websocket?token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0aGVzaXMiLCJleHAiOjE1Nzk4ODY1MTcsImlhdCI6MTU3NzQ2NzMxNywiaXNzIjoidGhlc2lzIiwianRpIjoiYmYwMjU4YjEtZWI1YS00M2M4LWIxMTctMDM5NjNkMGIzYjcyIiwibmJmIjoxNTc3NDY3MzE2LCJzdWIiOiIxIiwidGhlc2lzIjp7InRlYW0iOnsiYm9hcmRfaWRzIjpbMV0sImlkIjoxfX0sInR5cCI6ImFjY2VzcyJ9.Sp_dsKXED_6kUXx16itDClsjnIGVQtqhf-_joImYlDiVFPHekK-6M1WScHMbkPU6p2daiZgGrHHDxwo9eDWUTg")
+        .onConnected(
+          exec(
+            ws("Channel")
+              .sendText("""{"topic":"board:1", "event":"phx_join", "payload": {}, "ref":"1"}""")
+          )
+        )
     )
     .pause(10000)
     .exec(ws("Close WS").close)
@@ -71,7 +72,7 @@ class SampleService extends Simulation {
       scn.inject(
         nothingFor(5 seconds)
         // , constantUsersPerSec(5) during(100 minutes)
-        , rampUsersPerSec(5) to 1000 during(10 minutes)
+        , rampUsersPerSec(50) to 1000 during(10 minutes)
       )
     ).protocols(httpProtocol)
 }
